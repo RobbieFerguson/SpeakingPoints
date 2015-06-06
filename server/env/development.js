@@ -1,6 +1,7 @@
 module.exports = {
   "DATABASE_URI": "mongodb://localhost:27017/fsg-app",
   "SESSION_SECRET": "Optimus Prime is my real dad",
+  "iodApiKey":'3ada2b11-01fe-4e03-a23e-e0c9747013e7',
   "TWITTER": {
     "consumerKey": "INSERT_TWITTER_CONSUMER_KEY_HERE",
     "consumerSecret": "INSERT_TWITTER_CONSUMER_SECRET_HERE",
