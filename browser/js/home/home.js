@@ -7,7 +7,8 @@ app.config(function($stateProvider) {
 	});
 });
 
-app.controller('HomeController', function($scope, $window) {
+app.controller('HomeController', function($scope, $window, AudioProcessing) {
+	// console.log(AudioProcessing);
 
 	$scope.__log = function (e, data) {
 		log.innerHTML += "\n" + e + " " + (data || '');
@@ -30,7 +31,7 @@ app.controller('HomeController', function($scope, $window) {
 
 	$scope.startRecording = function () {
 		console.log($scope.recorder);
-		$scope.recorder && $scope.recorder.record();
+		$scope.recorder && e.recorder.record();
 		$scope.__log('Recording...');
 	}
 
@@ -39,19 +40,21 @@ app.controller('HomeController', function($scope, $window) {
 		$scope.recorder && $scope.recorder.stop();
 		$scope.__log('Stopped recording.');
 
-		// create WAV download link using audio data blob
+		// create WAV download link using audio data blob$scop
 		$scope.createDownloadLink();
-		console.log($scope.recorder)
+		// console.log($scope.recorder)
 		$scope.recorder.clear();
 	}
 
 	$scope.createDownloadLink = function () {
 		$scope.recorder && $scope.recorder.exportWAV(function(blob) {
+			
+			// console.log(blob);
 			var url = URL.createObjectURL(blob);
+			AudioProcessing.postAudio(url); 
 			var li = document.createElement('li');
 			var au = document.createElement('audio');
 			var hf = document.createElement('a');
-
 			au.controls = true;
 			au.src = url;
 			hf.href = url;
@@ -67,17 +70,17 @@ app.controller('HomeController', function($scope, $window) {
 			console.log('window on loading')
 			// webkit shim
 			$window.AudioContext = $window.AudioContext || $window.webkitAudioContext;
-			navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+			$window.navigator.getUserMedia = $window.navigator.getUserMedia || $window.navigator.webkitGetUserMedia;
 			$window.URL = $window.URL || $window.webkitURL;
 
 			$scope.audio_context = new AudioContext;
 			$scope.__log('Audio context set up.');
-			$scope.__log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+			$scope.__log('$window.navigator.getUserMedia ' + ($window.navigator.getUserMedia ? 'available.' : 'not present!'));
 		} catch (e) {
 			alert(e);
 		}
 
-		navigator.getUserMedia({
+		$window.navigator.getUserMedia({
 			audio: true
 		}, $scope.startUserMedia, function(e) {
 			$scope.__log('No live audio input: ' + e);

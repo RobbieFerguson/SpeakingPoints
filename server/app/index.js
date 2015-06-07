@@ -3,7 +3,10 @@ var path = require('path');
 var express = require('express');
 var app = express();
 module.exports = app;
-
+var bodyParser = require('body-parser'); 
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+app.use(bodyParser.json())
 // Pass our express application pipeline into the configuration
 // function located at server/app/configure/index.js
 require('./configure')(app);
