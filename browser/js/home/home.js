@@ -31,7 +31,7 @@ app.controller('HomeController', function($scope, $window, AudioProcessing) {
 
 	$scope.startRecording = function () {
 		console.log($scope.recorder);
-		$scope.recorder && e.recorder.record();
+		$scope.recorder && $scope.recorder.record();
 		$scope.__log('Recording...');
 	}
 
@@ -48,10 +48,10 @@ app.controller('HomeController', function($scope, $window, AudioProcessing) {
 
 	$scope.createDownloadLink = function () {
 		$scope.recorder && $scope.recorder.exportWAV(function(blob) {
-			
+
 			// console.log(blob);
+			AudioProcessing.postAudio(blob); 
 			var url = URL.createObjectURL(blob);
-			AudioProcessing.postAudio(url); 
 			var li = document.createElement('li');
 			var au = document.createElement('audio');
 			var hf = document.createElement('a');

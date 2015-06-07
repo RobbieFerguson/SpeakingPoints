@@ -2,7 +2,7 @@
 var router = require('express').Router();
 module.exports = router;
 var iod = require('iod-node')
-	// var client = new iod.IODClient('http://api.idolondemand.com', '3ada2b11-01fe-4e03-a23e-e0c9747013e7')
+	var client = new iod.IODClient('http://api.idolondemand.com', '3ada2b11-01fe-4e03-a23e-e0c9747013e7')
 var fs = require('fs');
 var path = require('path');
 // var http = require('http');
@@ -29,30 +29,35 @@ Promise.promisifyAll(needle);
 // })
 
 router.post('/', function(req, res, next) {
-	console.log('hit post analysis route');
-	console.log(req.body, 'BODY HERE')
-	// console.log('req.body.audio', req.body.audio);
-
-
-	// fs.writeFile('./audioFile.wav', req.body.audio, function(err) {
-	// 	if (err) throw 'err writing file' + err;
-	// 	console.log('Audio file successfully written, sir.');
-
-	// })
-	var dataObj = {
-		'apikey':'3ada2b11-01fe-4e03-a23e-e0c9747013e7',
-		file:{'file':req.body.audio,'content_type':'multipart/form-data'} 
-	};
-	needle.postAsync('http://api.idolondemand.com/1/api/async/recognizespeech/v1', dataObj, {
-		open_timeout: 0,
-		multipart: true
-	}).then(function(resp) {
-		console.log(resp);
-		res.status(200).send("Response from server");
+	console.log('Routing your request straight to HP\'s speech-to-text service, sir.');
+	fs.readFile(req.body.audio,function(err,data){
+		fs.writeFile('./audioFile.wav',data,function(err){
+			
+		})
 	})
-
+	fs.writeFile('./audioFile.wav', req.body.audio, function(err) {
+		if (err) throw 'err writing file' + err;
+		console.log('Audio file successfully written, sir.');
+	})
+	// var dataObj = {
+	// 	'apikey':'3ada2b11-01fe-4e03-a23e-e0c9747013e7',
+	// 	file:{'file':'./audioFile.wav','content_type':'multipart/form-data'} 
+	// };
+	var dataObj = {
+		file : './audioFile.wav'
+	}
+	console.log(dataObj.file)
+	// needle.postAsync('http://api.idolondemand.com/1/api/async/recognizespeech/v1', dataObj, {
+	// 	open_timeout: 0,
+	// 	multipart: true
+	// }).then(function(resp) {
+	// 	console.log('Your response is located at : https://api.idolondemand.com/1/job/result/' + resp[1].jobID + '?apikey='+ '3ada2b11-01fe-4e03-a23e-e0c9747013e7')
+	// 	res.status(200).send("Response from server");
+	// })
+	
 	// client.call('recognizespeech', function(err, resp, body) {
-	// 	// console.log("body", body); 
+	// 	console.log("body", resp); 
+
 	// 	console.log('https://api.idolondemand.com/1/job/result/' + body.data.jobID + '?apikey=' + '3ada2b11-01fe-4e03-a23e-e0c9747013e7')
 	// 	res.status(200).send("Can you read it from a book???");
 	// }, dataObj, true)
